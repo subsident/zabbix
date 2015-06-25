@@ -1,0 +1,67 @@
+######
+mariadb:
+  image: mariadb:5
+  ports:
+    - "3306:3306"
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ../configs/etc/mysql/my.cnf:/etc/mysql/my.cnf
+#   - /mnt/data/mysql/:/var/lib/mysql/                 # db folder
+    - /root/test/db/:/var/lib/mysql/                   # test db folder
+  environment:
+    - MYSQL_ROOT_PASSWORD=*********                    # set mysql password for root
+    - MYSQL_USER=*********                             # set mysql username for zabbix
+    - MYSQL_PASSWORD=*********                         # set mysql password for zabbix
+    - MYSQL_DATABASE=*********                         # set database name for zabbix
+    - TERM=xterm
+
+zabbix:
+  image: subsident/zabbix:latest
+  mem_limit: 1000000000                                # 1G
+  ports:
+    - "80:80"
+    - "162:162/udp"
+    - "10001:10001"
+    - "10051:10051"
+  volumes:
+    ### MIBS
+    - ../configs/mibs/:/usr/share/snmp/mibs/
+    ### TIME
+    - /etc/localtime:/etc/localtime:ro
+    ### MYSQL
+    - ../configs/.my.cnf:/root/.my.cnf
+#   - /mnt/data/mysql/:/var/lib/mysql/                 # db folder
+    - /root/test/db/:/var/lib/mysql/                   # test db folder
+    ### MSSQL-Client
+    - ../configs/etc/odbcinst.ini:/etc/odbcinst.ini
+    - ../configs/etc/odbc.ini:/etc/odbc.ini
+    ### SNMP
+    - ../configs/etc/sysconfig/snmptrapd:/etc/sysconfig/snmptrapd
+    - ../configs/etc/snmp/snmptrapd.conf:/etc/snmp/snmptrapd.conf
+    - ../configs/zabbix_trap_receiver.pl:/usr/local/bin/zabbix_trap_receiver.pl
+    ### ZABBIX
+    - ../configs/etc/logrotate.d/zabbix_traps:/etc/logrotate.d/zabbix_traps
+    - ../configs/etc/httpd/conf.d/zabbix.conf:/etc/httpd/conf.d/zabbix.conf
+    - ../configs/etc/php.d/zabbix.ini:/etc/php.d/zabbix.ini
+    - ../configs/etc/zabbix/:/etc/zabbix/
+    - ../configs/scripts/externalscripts/:/usr/lib/zabbix/externalscripts/
+    - ../configs/scripts/alertscripts/:/usr/lib/zabbix/alertscripts/
+    - ../configs/adminer.php:/usr/share/zabbix/adm.php
+    - ../configs/hipchat_room_message:/usr/local/bin/hipchat_room_message
+    - ../configs/sendEmail:/usr/local/bin/sendEmail
+    ### MONIT
+    - ../configs/etc/monitrc:/etc/monitrc
+    ### RUN
+    - run.sh:/run.sh
+  environment:
+    - TERM=xterm
+    - MONIT_WEB_USER=*********                         # monit user for web auth
+    - MONIT_WEB_PASSWORD=*********                     # monit pass for web auth
+    - SEND_EMAIL_FROM=*********                        # from (sender) email address
+    - SEND_EMAIL_SMTP_SERVER=*********                 # smtp mail relay, default is PORT 25/TCP
+    - SEND_EMAIL_SMTP_LOGIN=*********                  # username for SMTP authentication
+    - SEND_EMAIL_SMTP_PASSWORD=*********               # password for SMTP authentication
+    - DBHost=*********                                 # database host name for zabbix. If set to localhost, socket is used for MySQL.
+  links:
+    - mariadb:mysql
+
