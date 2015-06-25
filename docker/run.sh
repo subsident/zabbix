@@ -51,10 +51,10 @@ function check_install_mysql()
 	
 	sed -i 's/allow \*\*\*\*\*\*\*\*\*:\*\*\*\*\*\*\*\*\*/allow '$MONIT_WEB_USER':'$MONIT_WEB_PASSWORD'/' /etc/monitrc
         
-        sed -i 's/DBHost=\*\*\*\*\*\*\*\*\*/DBHost='$DBHost'/' /etc/zabbix/zabbix_server.conf
-        sed -i 's/DBName=\*\*\*\*\*\*\*\*\*/DBName='$USER_DB_NAME'/' /etc/zabbix/zabbix_server.conf
-        sed -i 's/DBUser=\*\*\*\*\*\*\*\*\*/DBUser='$USER_NAME'/' /etc/zabbix/zabbix_server.conf
-        sed -i 's/DBPassword=\*\*\*\*\*\*\*\*\*/DBPassword='$USER_PASS'/' /etc/zabbix/zabbix_server.conf
+        sed -i 's/DBHost=\*\*\*\*\*\*\*\*\*/DBHost='$DBHost'/' /etc/zabbix/zabbix_server_db.conf
+        sed -i 's/DBName=\*\*\*\*\*\*\*\*\*/DBName='$USER_DB_NAME'/' /etc/zabbix/zabbix_server_db.conf
+        sed -i 's/DBUser=\*\*\*\*\*\*\*\*\*/DBUser='$USER_NAME'/' /etc/zabbix/zabbix_server_db.conf
+        sed -i 's/DBPassword=\*\*\*\*\*\*\*\*\*/DBPassword='$USER_PASS'/' /etc/zabbix/zabbix_server_db.conf
         echo "=> Done"
     else
         echo "=> Using an existing volume of MySQL"
