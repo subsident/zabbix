@@ -1,0 +1,14 @@
+/tmp/zabbix_traps.tmp {
+    weekly
+    size 5M
+    compress
+    #compresscmd /usr/bin/bzip2
+    #compressoptions -9
+    notifempty
+    dateext
+    dateformat -%Y%m%d
+    missingok
+    #olddir /var/log/zabbix_traps_archive
+    #maxage 365
+    rotate 7
+}

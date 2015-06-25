@@ -1,0 +1,32 @@
+set init
+
+set httpd
+	port 10001
+	allow *********:*********
+
+#check process mysqld with pidfile /var/run/mysqld/mysqld.pid
+#	start program = "/sbin/service mysqld start" 
+#	stop program = "/sbin/service mysqld stop"
+
+#check process cron with pidfile /var/run/crond.pid
+#	start program = "/sbin/service crond start" 
+#	stop program = "/sbin/service crond stop"
+
+check process zabbix-server with pidfile /var/run/zabbix/zabbix_server.pid
+	start program = "/sbin/service zabbix-server start" 
+	stop program = "/sbin/service zabbix-server stop"
+    #depends on mysqld
+
+check process zabbix-agent with pidfile /var/run/zabbix/zabbix_agentd.pid
+	start program = "/sbin/service zabbix-agent start" 
+	stop program = "/sbin/service zabbix-agent stop"
+
+check process httpd with pidfile /var/run/httpd/httpd.pid
+	start program = "/sbin/service httpd start" 
+	stop program = "/sbin/service httpd stop"
+	depends on zabbix-server
+
+check process snmptrapd with pidfile /var/run/snmptrapd.pid
+	start program = "/sbin/service snmptrapd start" 
+	stop program = "/sbin/service snmptrapd stop"
+	#depends on zabbix-server
