@@ -55,7 +55,15 @@ function check_install_mysql()
         sed -i 's/DBName=\*\*\*\*\*\*\*\*\*/DBName='$USER_DB_NAME'/' /etc/zabbix/zabbix_server_db.conf
         sed -i 's/DBUser=\*\*\*\*\*\*\*\*\*/DBUser='$USER_NAME'/' /etc/zabbix/zabbix_server_db.conf
         sed -i 's/DBPassword=\*\*\*\*\*\*\*\*\*/DBPassword='$USER_PASS'/' /etc/zabbix/zabbix_server_db.conf
+        
+        sed -i "s/\$DB\[\"DATABASE\"\]\t\t\t= 'zabbix';/\$DB\[\"DATABASE\"\]\t\t\t= '$USER_DB_NAME';/" /etc/zabbix/web/zabbix.conf.php
+        sed -i "s/\$DB\[\"USER\"\]\t\t\t= 'zabbix';/\$DB\[\"USER\"\]\t\t\t= '$USER_NAME';/" /etc/zabbix/web/zabbix.conf.php
+        sed -i "s/\$DB\[\"PASSWORD\"\]\t\t\t= 'zabbix_password';/\$DB\[\"PASSWORD\"\]\t\t\t= '$USER_PASS';/" /etc/zabbix/web/zabbix.conf.php
         echo "=> Done"
+        
+        chmod 660 /etc/zabbix/web/zabbix.conf.php
+        chown root:apache /etc/zabbix/web/zabbix.conf.php
+        
     else
         echo "=> Using an existing volume of MySQL"
     fi
@@ -69,4 +77,11 @@ localedef -v -c -i ru_RU -f UTF-8 ru_RU.UTF-8
 echo "=> Executing Monit..."
 chmod 700 /etc/monitrc
 #export TERM=xterm
+
+rm -f /var/run/snmptrapd.pid
+rm -f /var/run/zabbix/zabbix_agentd.pid
+rm -f /var/run/zabbix/zabbix_server.pid
+rm -f /var/run/httpd/httpd.pid
+rm -f /var/run/monit.pid
+
 exec monit -d 10 -Ic /etc/monitrc
