@@ -8,6 +8,7 @@ mariadb:
     - ../configs/etc/mysql/my.cnf:/etc/mysql/my.cnf
 #   - /mnt/data/mysql/:/var/lib/mysql/                 # db folder
     - /root/test/db/:/var/lib/mysql/                   # test db folder
+    - ../configs/mnt_files/.my.cnf:/root/.my.cnf
   environment:
     - MYSQL_ROOT_PASSWORD=*********                    # set mysql password for root
     - MYSQL_USER=*********                             # set mysql username for zabbix
@@ -29,7 +30,6 @@ zabbix:
     ### TIME
     - /etc/localtime:/etc/localtime:ro
     ### MYSQL
-    - ../configs/.my.cnf:/root/.my.cnf
 #   - /mnt/data/mysql/:/var/lib/mysql/                 # db folder
     - /root/test/db/:/var/lib/mysql/                   # test db folder
     ### MSSQL-Client
@@ -49,10 +49,10 @@ zabbix:
     - ../configs/adminer.php:/usr/share/zabbix/adm.php
     - ../configs/hipchat_room_message:/usr/local/bin/hipchat_room_message
     - ../configs/sendEmail:/usr/local/bin/sendEmail
-    ### MONIT
-    - ../configs/etc/monitrc:/etc/monitrc
     ### RUN
-    - run.sh:/run.sh
+    - ./run.sh:/run.sh
+    ### MOUNT FILES
+    - ../configs/mnt_files/:/mnt_files/                # mount files
   environment:
     - TERM=xterm
     - MONIT_WEB_USER=*********                         # monit user for web auth

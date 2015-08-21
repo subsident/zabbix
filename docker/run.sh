@@ -42,14 +42,14 @@ function check_install_mysql()
         #mysqladmin -uroot shutdown
         
         echo "=> Launched the process of setting the configuration files"
-        sed -i 's/password="\*\*\*\*\*\*\*\*\*"/password="'$ROOT_PASS'"/' /root/.my.cnf
+        sed -i 's/password="\*\*\*\*\*\*\*\*\*"/password="'$ROOT_PASS'"/' /mnt_files/.my.cnf
         
         sed -i 's/FROM="\*\*\*\*\*\*\*\*\*"/FROM="Zabbix Server <'$SEND_EMAIL_FROM'>"/' /usr/lib/zabbix/alertscripts/sm.sh
         sed -i 's/SMTP_SERVER=\*\*\*\*\*\*\*\*\*/SMTP_SERVER='$SEND_EMAIL_SMTP_SERVER'/' /usr/lib/zabbix/alertscripts/sm.sh
         sed -i 's/SMTP_LOGIN=\*\*\*\*\*\*\*\*\*/SMTP_LOGIN='$SEND_EMAIL_SMTP_LOGIN'/' /usr/lib/zabbix/alertscripts/sm.sh
         sed -i 's/SMTP_PASSWORD=\*\*\*\*\*\*\*\*\*/SMTP_PASSWORD='$SEND_EMAIL_SMTP_PASSWORD'/' /usr/lib/zabbix/alertscripts/sm.sh
 	
-	sed -i 's/allow \*\*\*\*\*\*\*\*\*:\*\*\*\*\*\*\*\*\*/allow '$MONIT_WEB_USER':'$MONIT_WEB_PASSWORD'/' /etc/monitrc
+	sed -i 's/allow \*\*\*\*\*\*\*\*\*:\*\*\*\*\*\*\*\*\*/allow '$MONIT_WEB_USER':'$MONIT_WEB_PASSWORD'/' /mnt_files/monitrc
         
         sed -i 's/DBHost=\*\*\*\*\*\*\*\*\*/DBHost='$DBHost'/' /etc/zabbix/zabbix_server_db.conf
         sed -i 's/DBName=\*\*\*\*\*\*\*\*\*/DBName='$USER_DB_NAME'/' /etc/zabbix/zabbix_server_db.conf
@@ -70,6 +70,15 @@ function check_install_mysql()
 }
 
 check_install_mysql
+
+if [[ ! -a /root/.my.cnf ]]; then
+    ln -s /mnt_files/.my.cnf /root/.my.cnf
+fi
+
+
+if [[ ! -a /etc/monitrc ]]; then
+    cp /mnt_files/monitrc /etc/monitrc
+fi
 
 echo "=> localedef ru_RU.UTF-8"
 localedef -v -c -i ru_RU -f UTF-8 ru_RU.UTF-8
