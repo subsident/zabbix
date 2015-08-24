@@ -55,8 +55,8 @@ zabbix:
     - ../configs/mnt_files/:/mnt_files/                # mount files
   environment:
     - TERM=xterm
-    - MONIT_WEB_USER=*********                         # monit user for web auth
-    - MONIT_WEB_PASSWORD=*********                     # monit pass for web auth
+    - SUPERVISOR_USER=*********                        # supervisor user for auth
+    - SUPERVISOR_PASSWORD=*********                    # supervisor pass for auth
     - SEND_EMAIL_FROM=*********                        # from (sender) email address
     - SEND_EMAIL_SMTP_SERVER=*********                 # smtp mail relay, default is PORT 25/TCP
     - SEND_EMAIL_SMTP_LOGIN=*********                  # username for SMTP authentication

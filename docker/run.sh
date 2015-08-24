@@ -49,7 +49,8 @@ function check_install_mysql()
         sed -i 's/SMTP_LOGIN=\*\*\*\*\*\*\*\*\*/SMTP_LOGIN='$SEND_EMAIL_SMTP_LOGIN'/' /usr/lib/zabbix/alertscripts/sm.sh
         sed -i 's/SMTP_PASSWORD=\*\*\*\*\*\*\*\*\*/SMTP_PASSWORD='$SEND_EMAIL_SMTP_PASSWORD'/' /usr/lib/zabbix/alertscripts/sm.sh
 	
-	sed -i 's/allow \*\*\*\*\*\*\*\*\*:\*\*\*\*\*\*\*\*\*/allow '$MONIT_WEB_USER':'$MONIT_WEB_PASSWORD'/' /mnt_files/monitrc
+	sed -i 's/username=user_unix_http_server/username='$SUPERVISOR_USER'/' /mnt_files/supervisord.conf
+	sed -i 's/password=123_unix_http_server/password='$SUPERVISOR_PASSWORD'/' /mnt_files/supervisord.conf
         
         sed -i 's/DBHost=\*\*\*\*\*\*\*\*\*/DBHost='$DBHost'/' /etc/zabbix/zabbix_server_db.conf
         sed -i 's/DBName=\*\*\*\*\*\*\*\*\*/DBName='$USER_DB_NAME'/' /etc/zabbix/zabbix_server_db.conf
@@ -75,22 +76,16 @@ if [[ ! -a /root/.my.cnf ]]; then
     ln -s /mnt_files/.my.cnf /root/.my.cnf
 fi
 
-
-if [[ ! -a /etc/monitrc ]]; then
-    cp /mnt_files/monitrc /etc/monitrc
-fi
-
 echo "=> localedef ru_RU.UTF-8"
 localedef -v -c -i ru_RU -f UTF-8 ru_RU.UTF-8
 
-echo "=> Executing Monit..."
-chmod 700 /etc/monitrc
-#export TERM=xterm
+echo "=> Executing Supervisor..."
+#chmod 700 /etc/monitrc
 
 rm -f /var/run/snmptrapd.pid
 rm -f /var/run/zabbix/zabbix_agentd.pid
 rm -f /var/run/zabbix/zabbix_server.pid
 rm -f /var/run/httpd/httpd.pid
-rm -f /var/run/monit.pid
+rm -f /var/run/supervisord.pid
 
-exec monit -d 10 -Ic /etc/monitrc
+exec /usr/bin/supervisord -c /mnt_files/supervisord.conf
