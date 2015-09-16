@@ -1,7 +1,7 @@
 ######
 mariadb:
   image: mariadb:5
-  mem_limit: 1073741824                                # 1G
+# mem_limit: 1000000000                                # 1G
   ports:
     - "3306:3306"
   volumes:
@@ -19,7 +19,7 @@ mariadb:
 
 zabbix:
   image: subsident/zabbix:latest
-  mem_limit: 1073741824                                # 1G
+# mem_limit: 1000000000                                # 1G
   ports:
     - "80:80"
     - "162:162/udp"

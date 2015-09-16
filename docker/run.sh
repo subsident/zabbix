@@ -49,8 +49,8 @@ function check_install_mysql()
         sed -i 's/SMTP_LOGIN=\*\*\*\*\*\*\*\*\*/SMTP_LOGIN='$SEND_EMAIL_SMTP_LOGIN'/' /usr/lib/zabbix/alertscripts/sm.sh
         sed -i 's/SMTP_PASSWORD=\*\*\*\*\*\*\*\*\*/SMTP_PASSWORD='$SEND_EMAIL_SMTP_PASSWORD'/' /usr/lib/zabbix/alertscripts/sm.sh
 	
-	sed -i 's/username=user_unix_http_server/username='$SUPERVISOR_USER'/' /mnt_files/supervisord.conf
-	sed -i 's/password=123_unix_http_server/password='$SUPERVISOR_PASSWORD'/' /mnt_files/supervisord.conf
+	sed -i 's/username=user_inet_http_server/username='$SUPERVISOR_USER'/' /mnt_files/supervisord.conf
+	sed -i 's/password=123_inet_http_server/password='$SUPERVISOR_PASSWORD'/' /mnt_files/supervisord.conf
         
         sed -i 's/DBHost=\*\*\*\*\*\*\*\*\*/DBHost='$DBHost'/' /etc/zabbix/zabbix_server_db.conf
         sed -i 's/DBName=\*\*\*\*\*\*\*\*\*/DBName='$USER_DB_NAME'/' /etc/zabbix/zabbix_server_db.conf
