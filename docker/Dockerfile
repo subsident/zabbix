@@ -5,7 +5,7 @@ RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY* ; \
     rpm --import http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX ; \
     rpm --import http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
 
-RUN yum history new
+#RUN yum history new
 
 RUN yum -y distribution-synchronization
 

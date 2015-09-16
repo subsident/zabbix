@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 5
+sleep 45
 
 function check_install_mysql()
 {
@@ -42,7 +42,7 @@ function check_install_mysql()
         #mysqladmin -uroot shutdown
         
         echo "=> Launched the process of setting the configuration files"
-        sed -i 's/password="\*\*\*\*\*\*\*\*\*"/password="'$ROOT_PASS'"/' /mnt_files/.my.cnf
+        sed -i 's|#password="\*\*\*\*\*\*\*\*\*"|password="'$ROOT_PASS'"|' /mnt_files/.my.cnf
         
         sed -i 's/FROM="\*\*\*\*\*\*\*\*\*"/FROM="Zabbix Server <'$SEND_EMAIL_FROM'>"/' /usr/lib/zabbix/alertscripts/sm.sh
         sed -i 's/SMTP_SERVER=\*\*\*\*\*\*\*\*\*/SMTP_SERVER='$SEND_EMAIL_SMTP_SERVER'/' /usr/lib/zabbix/alertscripts/sm.sh
